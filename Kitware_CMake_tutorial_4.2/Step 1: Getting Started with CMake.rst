@@ -238,12 +238,11 @@ set the CMake version as follows:
 
   <details><summary>TODO 1: Click to show/hide answer</summary>
 
-.. literalinclude:: Step3/CMakeLists.txt
+.. code-block:: cmake
   :caption: TODO 1: CMakeLists.txt
   :name: CMakeLists.txt-cmake_minimum_required
-  :language: cmake
-  :start-at: cmake_minimum_required
-  :end-at: cmake_minimum_required
+
+  cmake_minimum_required(VERSION 3.23)
 
 .. raw:: html
 
@@ -257,12 +256,11 @@ software with this ``CMakeLists.txt``.
 
   <details><summary>TODO 2: Click to show/hide answer</summary>
 
-.. literalinclude:: Step3/CMakeLists.txt
+.. code-block:: cmake
   :caption: TODO 2: CMakeLists.txt
   :name: CMakeLists.txt-project
-  :language: cmake
-  :start-at: project
-  :end-at: project
+
+  project(Tutorial)
 
 .. raw:: html
 
@@ -274,12 +272,11 @@ Now we can setup our executable target for the Tutorial with :command:`add_execu
 
   <details><summary>TODO 3: Click to show/hide answer</summary>
 
-.. literalinclude:: Step3/Tutorial/CMakeLists.txt
+.. code-block:: cmake
   :caption: TODO 3: CMakeLists.txt
   :name: CMakeLists.txt-add_executable
-  :language: cmake
-  :start-at: add_executable
-  :end-at: add_executable
+
+  add_executable(Tutorial)
 
 .. raw:: html
 
@@ -437,12 +434,11 @@ executable.
 
   <details><summary>TODO 5: Click to show/hide answer</summary>
 
-.. literalinclude:: Step3/MathFunctions/CMakeLists.txt
+.. code-block:: cmake
   :caption: TODO 5: CMakeLists.txt
   :name: CMakeLists.txt-add_library
-  :language: cmake
-  :start-at: add_library
-  :end-at: add_library
+
+  add_library(MathFunctions)
 
 .. raw:: html
 
@@ -627,12 +623,14 @@ be modified and ``MathFunctions`` as the library we want to add.
 
   <details><summary>TODO 7: Click to show/hide answer</summary>
 
-.. literalinclude:: Step3/Tutorial/CMakeLists.txt
+.. code-block:: cmake
   :caption: TODO 7: CMakeLists.txt
   :name: CMakeLists.txt-target_link_libraries
-  :language: cmake
-  :start-at: target_link_libraries(Tutorial
-  :end-at: )
+
+  target_link_libraries(Tutorial
+    PRIVATE
+      MathFunctions
+  )
 
 .. raw:: html
 
@@ -657,20 +655,17 @@ header file and modifying our ``sqrt()`` call.
 
   <details><summary>TODO 8-9: Click to show/hide answer</summary>
 
-.. literalinclude:: Step3/Tutorial/Tutorial.cxx
+.. code-block:: c++
   :caption: TODO 8: Tutorial/Tutorial.cxx
   :name: Tutorial/Tutorial.cxx-MathFunctions-headers
-  :language: c++
-  :start-at: iostream
-  :end-at: MathFunctions.h
 
-.. literalinclude:: Step3/Tutorial/Tutorial.cxx
+  #include <MathFunctions.h>
+
+.. code-block:: c++
   :caption: TODO 9: Tutorial/Tutorial.cxx
   :name: Tutorial/Tutorial.cxx-MathFunctions-code
-  :language: c++
-  :start-at: calculate square root
-  :end-at: mathfunctions::sqrt
-  :dedent: 2
+
+  double const outputValue = mathfunctions::sqrt(inputValue);
 
 .. raw:: html
 
@@ -765,10 +760,21 @@ We need to move all the commands concerning the ``Tutorial`` executable into
 
   <details><summary>TODO 10-11: Click to show/hide answer</summary>
 
-.. literalinclude:: Step3/Tutorial/CMakeLists.txt
+.. code-block:: cmake
   :caption: TODO 10: Tutorial/CMakeLists.txt
   :name: Tutorial/CMakeLists.txt-moved
-  :language: cmake
+
+  add_executable(Tutorial)
+
+  target_sources(Tutorial
+    PRIVATE
+      Tutorial.cxx
+  )
+  
+  target_link_libraries(Tutorial
+    PRIVATE
+      MathFunctions
+  )
 
 .. code-block:: cmake
   :caption: TODO 11: CMakeLists.txt
@@ -788,17 +794,27 @@ necessary, the default value will work.
 
   <details><summary>TODO 12-13: Click to show/hide answer</summary>
 
-.. literalinclude:: Step3/MathFunctions/CMakeLists.txt
+.. code-block:: cmake
   :caption: TODO 12: MathFunctions/CMakeLists.txt
   :name: MathFunctions/CMakeLists.txt-moved
-  :language: cmake
 
-.. literalinclude:: Step3/CMakeLists.txt
+  add_library(MathFunctions)
+
+  target_sources(MathFunctions
+    PRIVATE
+      MathFunctions.cxx
+  
+    PUBLIC
+      FILE_SET HEADERS
+      FILES
+        MathFunctions.h
+  )
+
+.. code-block:: cmake
   :caption: TODO 13: CMakeLists.txt
   :name: CMakeLists.txt-add_subdirectory-MathFunctions
-  :language: cmake
-  :start-at: add_subdirectory(MathFunctions
-  :end-at: add_subdirectory(MathFunctions
+
+  add_subdirectory(MathFunctions)
 
 .. raw:: html
 
