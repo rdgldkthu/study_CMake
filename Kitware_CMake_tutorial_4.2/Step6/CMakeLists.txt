@@ -7,6 +7,7 @@ option(TUTORIAL_USE_STD_SQRT "Use std::sqrt" OFF)
 
 # TODO6: Add a default-ON option named TUTORIAL_ENABLE_IPO with a doc string:
 #          "Check for and use IPO support"
+option(TUTORIAL_ENABLE_IPO "Check for and use IPO support" ON)
 
 # TODO7: Include and use the CheckIPOSupported module to enable IPO if
 #        TUTORIAL_ENABLE_IPO is True. To enable IPO, use:
@@ -14,6 +15,15 @@ option(TUTORIAL_USE_STD_SQRT "Use std::sqrt" OFF)
 #        Otherwise, follow the examples in the CheckIPOSupported documentation.
 #        Specifically, follow the documentation example to emit an error message
 #        if IPO is unavailable.
+if(TUTORIAL_ENABLE_IPO)
+  include(CheckIPOSupported)
+  check_ipo_supported(RESULT result OUTPUT output)
+  if(result)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION True)
+  else()
+    message(WARNING "IPO is not supported: ${output}")
+  endif()
+endif()
 
 if(TUTORIAL_BUILD_UTILITIES)
   add_subdirectory(Tutorial)
